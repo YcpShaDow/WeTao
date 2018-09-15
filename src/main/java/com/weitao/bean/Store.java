@@ -40,4 +40,14 @@ public class Store {
     public void setSellerId(Integer sellerId) {
         this.sellerId = sellerId;
     }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "stId=" + stId +
+                ", stName='" + stName + '\'' +
+                ", stStatus=" + stStatus +
+                ", sellerId=" + sellerId +
+                '}';
+    }
 }

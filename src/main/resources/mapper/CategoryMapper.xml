@@ -68,4 +68,11 @@
       ca_father = #{caFather,jdbcType=VARCHAR}
     where ca_id = #{caId,jdbcType=INTEGER}
   </update>
+
+<!--查询物品的父类-->
+  <select id="selectCafather" parameterType="java.lang.String" resultType="com.weitao.bean.Category">
+    SELECT *
+    from category
+    where ca_father=#{caFather}
+  </select>
 </mapper>

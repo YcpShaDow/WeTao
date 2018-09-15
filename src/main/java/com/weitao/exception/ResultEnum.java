@@ -9,7 +9,11 @@ public enum ResultEnum {
     USERNAME_EXIST("101","用户名已存在"),
     USER_NOT_EXIST("102","用户名不存在"),
     USER_NOT_FAIL("103","查询用户失败"),
-    USER_LOGIN_FAIL("103","登陆失败")
+    USER_LOGIN_FAIL("103","登陆失败"),
+
+
+    ITEMS_EXSIT("201","库存小于0"),
+    ITEMS_INSERT_FAIL("202","商品添加失败")
     ;
     private String code;
     private String msg;

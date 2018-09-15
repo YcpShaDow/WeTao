@@ -30,4 +30,13 @@ public class Category {
     public void setCaFather(String caFather) {
         this.caFather = caFather == null ? null : caFather.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "caId=" + caId +
+                ", caName='" + caName + '\'' +
+                ", caFather='" + caFather + '\'' +
+                '}';
+    }
 }

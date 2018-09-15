@@ -1,0 +1,145 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript" src="static/jq/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="static/jq/ajaxfileupload.js"></script>
+    </head>
+    <body>
+    <form id="formTest" enctype="multipart/form-data">
+        插入商品信息：
+        <table width="100%" border="1">
+            <tr>
+                <td>商品名</td>
+                <td><input type="text" name="iName" /></td>
+            </tr>
+            <tr>
+                <td>商品图片</td>
+            <tr>
+                <td height="200" align="center"><div id="photo"></div></td>
+            </tr>
+                <td><input type="file" name="i_Photos" id="upfilePhotoId" onchange="upfilePhoto()" required="required" ></td>
+            </tr>
+            <tr>
+                <td>商品简介</td>
+                <td>
+                    <textarea rows="3" cols="30" name="iIntroduction"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>商品价格</td>
+                <td><input type="text" name="iPrice" /></td>
+            </tr>
+            <tr>
+                <td>库存</td>
+                <td><input type="text" name="iExsit" /></td>
+            </tr>
+            <tr>
+                <td>商品类别</td>
+                   <td>
+            <select id="caFather"  name="caFather" onchange="sonSel()">
+              <option value="-1">请选择商品类型</option>
+              <option value="男鞋">男鞋</option>
+              <option value="男装">男装</option>
+              <option value="女鞋">女鞋</option>
+              <option value="女装">女装</option>
+              <option value="手机电脑">手机数码</option>
+              <option value="电器">电器</option>
+            </select>
+              <select id="second" name="catagoryId"></select>
+          </td>
+            </tr>
+            <tr>
+                <td>店铺名</td>
+                <td>
+                <select id="storeId"  name="storeId"></select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="submit" value= "提交"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    </body>
+    </html>
+    <!--插入数据-->
+    <script type="text/javascript">
+            $("#submit").click(function () {
+                console.log('submit');
+                var form = new FormData(document.getElementById("formTest"));
+                $.ajax({
+                    url:'/insertItems',
+                    type:'POST',
+                    data:form,
+                    processData:false,
+                    contentType:false,/*使用formdate一定要加上去*/
+                    success:function (result) {
+                        if(result.code=="0")
+                      window.location.href='success';
+                    else
+                        alert("错误")
+                    }
+                });
+            });
+    </script>
+    <script type="text/javascript">
+        window.onload=function(){
+            var  str="<option value=''>—请选择—</option>";
+            var store=$("#storeId");
+            $.ajax({
+                url:'/findStore',
+                type:'post',
+                success:function (data) {
+                   for(var i=0;i<data.length;i++){
+                        var stId=data[i].stId;
+                       str+="<option value='"+stId+"'>" +data[i].stName +" </option>";
+                    }
+                    store.html(str);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+           $("#second").hide();//初始化第二个下拉框隐藏
+        });
+        var second1=$("#second");
+        function sonSel(){//第一个下拉框调用此方法
+        var cafather=$("#caFather").val();//获得第一个下拉框的值
+          /*  alert(cafather);//测试是否获得*/
+            if(cafather!=null&&cafather!=""&&cafather!=-1){
+            //通过ajax将cafather传入后台处理
+                $.post("findCafather",{cafather:cafather},function (data) {
+                    var option;
+                    for(var i=0;i<data.length;i++){
+                        var catagoryId=data[i].caId;//获取它的id值
+                       /* alert(data.length);//测试*/
+                        option+="<option value='"+catagoryId+"'>" +data[i].caName +" </option>";
+                    }
+                    second1.html(option);
+                    second1.show();
+                })
+            }
+            else
+            {
+                $("#second").hide();
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function  upfilePhoto() {
+            $.ajaxFileUpload({
+                url:"upFile",
+                secureuri:false,//是否启动安全提交，默认为false
+                fileElementId:"upfilePhotoId",//需要上传的文件ID
+                dataType:'text',
+                success:function (data) {
+                    alert(data+"----") //测试接受到什么数据
+                    $("#photo").html("<img  width='300px' height='400px'  src='"+data+"'/>");
+                }
+            })
+        }
+    </script>

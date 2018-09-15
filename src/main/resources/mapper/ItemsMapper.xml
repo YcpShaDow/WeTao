@@ -180,4 +180,63 @@
       catagory_id = #{catagoryId,jdbcType=INTEGER}
     where i_id = #{iId,jdbcType=INTEGER}
   </update>
+<!--按条件的查的sql片段-->
+  <sql id="query_items">
+    <if test="_parameter!=null">
+      and category.ca_father LIKE '%${caFather}%'
+    </if>
+    <if test="_parameter!=null">
+      and items.i_name LIKE '%${iName}%'
+    </if>
+    <if test="_parameter!=null">
+      and category.ca_name LIKE '%${caName}%'
+    </if>
+  </sql>
+  <!--给一个条件查询-->
+  <select id="selectItemsAll" parameterType="com.weitao.vo.ItemsVo" resultMap="selectItemsMap">
+              SELECT items.* from items
+              where  items.i_status=0
+              and items.catagory_id IN
+              (SELECT ca_id FROM category WHERE ca_father like '%${search}%' or  ca_name like '%${search}%')
+              OR items.i_name like '%${search}%'
+  </select>
+
+  <!--根据不同的条件查询类别中的各种商品s升序-->
+  <select id="selectItems" parameterType="com.weitao.vo.ItemsVo" resultMap="selectItemsMap">
+    		select items.*,category.ca_father
+					from items,category
+            <where>
+                    i_status=0
+                    and items.catagory_id=category.ca_id
+                <include refid="query_items"></include>
+             </where>
+             ORDER BY items.${type}
+  </select>
+
+  <!--根据不同的条件查询类别中的各种商品s升序-->
+  <select id="selectItemsDown" parameterType="com.weitao.vo.ItemsVo" resultMap="selectItemsDownMap">
+    select items.*,category.ca_father
+    from items,category
+    <where>
+      i_status=0
+      and items.catagory_id=category.ca_id
+      <include refid="query_items"></include>
+    </where>
+    ORDER BY items.${type} DESC
+  </select>
+
+  <!--信息-->
+  <resultMap id="selectItemsMap" type="com.weitao.vo.ItemsVo" extends="ResultMapWithBLOBs">
+    <!--商品信息-->
+    <!--一个商品对应一个类别-->
+    <association property="category" javaType="com.weitao.bean.Category">
+      <id column="ca_id" jdbcType="INTEGER" property="caId" />
+      <result column="ca_name" jdbcType="VARCHAR" property="caName" />
+      <result column="ca_father" jdbcType="VARCHAR" property="caFather" />
+    </association>
+  </resultMap>
+
+  <resultMap id="selectItemsDownMap" type="com.weitao.vo.ItemsVo" extends="selectItemsMap">
+  </resultMap>
+
 </mapper>

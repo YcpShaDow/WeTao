@@ -79,4 +79,10 @@
       seller_id = #{sellerId,jdbcType=INTEGER}
     where st_id = #{stId,jdbcType=INTEGER}
   </update>
+  <!--寻找卖家有多少间不同状态的店铺-->
+  <select id="seleteStore" parameterType="com.weitao.bean.Store" resultType="com.weitao.bean.Store">
+    SELECT *
+    from store
+    where seller_id=#{sellerId} AND st_status=#{stStatus}
+  </select>
 </mapper>

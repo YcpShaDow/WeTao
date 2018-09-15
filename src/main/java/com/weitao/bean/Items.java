@@ -1,9 +1,21 @@
 package com.weitao.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class Items {
+/*    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }*/
+
     private Integer iId;
 
     private String iName;
@@ -16,6 +28,8 @@ public class Items {
 
     private BigDecimal iPrice;
 
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date iDate;
 
     private Byte iStatus;
@@ -23,6 +37,7 @@ public class Items {
     private Integer storeId;
 
     private Integer catagoryId;
+
 
     private String iIntroduction;
 
@@ -112,5 +127,22 @@ public class Items {
 
     public void setiIntroduction(String iIntroduction) {
         this.iIntroduction = iIntroduction == null ? null : iIntroduction.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Items{" +
+                ", iId=" + iId +
+                ", iName='" + iName + '\'' +
+                ", iPhotos='" + iPhotos + '\'' +
+                ", iExsit=" + iExsit +
+                ", iSale=" + iSale +
+                ", iPrice=" + iPrice +
+                ", iDate=" + iDate +
+                ", iStatus=" + iStatus +
+                ", storeId=" + storeId +
+                ", catagoryId=" + catagoryId +
+                ", iIntroduction='" + iIntroduction + '\'' +
+                '}';
     }
 }
